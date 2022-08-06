@@ -29,7 +29,10 @@ struct grub_net;
 struct grub_device
 {
   struct grub_disk *disk;
-  struct grub_net *net;
+  union {
+    struct grub_net *net;
+    struct disknet_grub_net *disknet;
+  };
 };
 typedef struct grub_device *grub_device_t;
 

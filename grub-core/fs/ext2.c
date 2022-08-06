@@ -1094,8 +1094,6 @@ grub_ext2_mtime (grub_device_t device, grub_int64_t *tm)
 
 }
 
-
-
 static struct grub_fs grub_ext2_fs =
   {
     .name = "ext2",
